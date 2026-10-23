@@ -31,3 +31,8 @@ app.add_middleware(
 @app.get("/")
 def root() -> dict:
     return {"message": "it works !"}
+
+
+@app.get("/addition")
+def addition(a: int, b: int) -> dict:
+    return {"result a+b=": a + b, "developer": "Dev1"}
