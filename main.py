@@ -35,6 +35,7 @@ def root() -> dict:
     return {"message": "it works !"}
 
 
+<<<<<<< HEAD
 def current_ip() -> str:
     """IP address of the network interface connected to the Internet."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -55,3 +56,8 @@ def greeting(name: str) -> dict:
         "hostname": socket.gethostname(),
         "IP": current_ip(),
     }
+=======
+@app.get("/addition")
+def addition(a: int, b: int) -> dict:
+    return {"result a+b=": a + b, "developer": "Dev1"}
+>>>>>>> origin/main

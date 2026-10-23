@@ -17,6 +17,12 @@ A minimal **FastAPI** application built as part of the *Plateforme collaborative
 {"message": "Hello, X", "developer": "Dev2", "hostname": "pc-name", "IP": "192.168.0.x"}
 ```
 
+- `GET /addition?a=1&b=2` returns the sum of `a` and `b` and the developer name:
+
+```json
+{"result a+b=": 3, "developer": "Dev1"}
+```
+
 ## Prerequisites
 
 - Python 3.10+
