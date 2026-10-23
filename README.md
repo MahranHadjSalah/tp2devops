@@ -103,4 +103,8 @@ git push
 
 - Leader: _your name_
 - Dev1: _name_
+<<<<<<< HEAD
 - Dev2: _name_
+=======
+- Dev2: _name_
+>>>>>>> 5f25a90 (readme)
