@@ -1,3 +1,5 @@
+import socket
+
 from typing import Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
@@ -33,6 +35,29 @@ def root() -> dict:
     return {"message": "it works !"}
 
 
+<<<<<<< HEAD
+def current_ip() -> str:
+    """IP address of the network interface connected to the Internet."""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        sock.connect(("8.8.8.8", 80))
+        return sock.getsockname()[0]
+    except OSError:
+        return "127.0.0.1"
+    finally:
+        sock.close()
+
+
+@app.get("/greeting")
+def greeting(name: str) -> dict:
+    return {
+        "message": f"Hello, {name}",
+        "developer": "Dev2",
+        "hostname": socket.gethostname(),
+        "IP": current_ip(),
+    }
+=======
 @app.get("/addition")
 def addition(a: int, b: int) -> dict:
     return {"result a+b=": a + b, "developer": "Dev1"}
+>>>>>>> origin/main
