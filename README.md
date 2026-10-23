@@ -10,6 +10,11 @@ A minimal **FastAPI** application built as part of the *Plateforme collaborative
 ```json
 {"message": "it works !"}
 ```
+- `GET /addition?a=1&b=2` returns the sum of `a` and `b` and the developer name:
+
+```json
+{"result a+b=": 3, "developer": "Dev1"}
+```
 
 ## Prerequisites
 
