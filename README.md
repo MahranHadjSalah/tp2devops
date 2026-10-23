@@ -9,7 +9,7 @@ A minimal **FastAPI** application built as part of the *Plateforme collaborative
 
 ```json
 {"message": "it works !"}
-```
+```sz
 
 ## Prerequisites
 
