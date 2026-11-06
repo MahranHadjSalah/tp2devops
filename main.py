@@ -66,3 +66,9 @@ def greeting(name: str) -> dict:
 @app.post("/multiply")
 def multiply(op: Operands) -> dict:
     return {"result a*b=": op.a * op.b, "developer": "Dev1"}
+
+@app.post("/divide")
+def divide(op: Operands) -> dict:
+    if op.b == 0:
+        raise HTTPException(status_code=400, detail="Division by zero")
+    return {"result a/b=": op.a / op.b, "developer": "Dev2"}
