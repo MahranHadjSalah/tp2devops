@@ -63,9 +63,12 @@ def greeting(name: str) -> dict:
         "hostname": socket.gethostname(),
         "IP": current_ip(),
     }
+
+
 @app.post("/multiply")
 def multiply(op: Operands) -> dict:
     return {"result a*b=": op.a * op.b, "developer": "Dev1"}
+
 
 @app.post("/divide")
 def divide(op: Operands) -> dict:
