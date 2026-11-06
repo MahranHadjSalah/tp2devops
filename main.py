@@ -54,6 +54,11 @@ def addition(a: int, b: int) -> dict:
     return {"result a+b=": a + b, "developer": "Dev1"}
 
 
+@app.get("/soustraction")
+def soustraction(a: int, b: int) -> dict:
+    return {"result a-b=": a - b, "developer": "Dev1"}
+
+
 def current_ip() -> str:
     """IP address of the network interface connected to the Internet."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
