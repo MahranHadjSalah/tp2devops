@@ -28,6 +28,17 @@ class Operands(BaseModel):
     a: float
     b: float
 
+class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+
+items: Dict[int, Item] = {
+    1: Item(name="item1", description="first item"),
+    2: Item(name="item2", description="second item"),
+    3: Item(name="item3", description="third item"),
+}
+
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -75,3 +86,15 @@ def divide(op: Operands) -> dict:
     if op.b == 0:
         raise HTTPException(status_code=400, detail="Division by zero")
     return {"result a/b=": op.a / op.b, "developer": "Dev2"}
+
+@app.get("/items")
+def list_items() -> List[dict]:
+    return [{"id": k, **v.model_dump()} for k, v in items.items()]
+
+
+@app.delete("/remove/{item_id}")
+def remove(item_id: int) -> dict:
+    if item_id not in items:
+        raise HTTPException(status_code=404, detail="Item not found")
+    del items[item_id]
+    return {"deleted": item_id, "developer": "Dev1"}
