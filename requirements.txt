@@ -1,4 +1,6 @@
 fastapi
 uvicorn
-pytest
 httpx
+pytest
+pytest-cov
+pylint

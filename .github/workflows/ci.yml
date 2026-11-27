@@ -1,4 +1,4 @@
-name: test
+name: CI
 
 on:
   push:
@@ -9,28 +9,47 @@ permissions:
   checks: write
 
 jobs:
+  # ---------- stage: test ----------
   run-test:
     runs-on: ubuntu-latest
     container: python:3.12-slim
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: pip install -r requirements.txt
-
       - name: Run unit tests
         run: pytest -v --junitxml=report.xml
-
-      - name: Upload JUnit report as artifact
+      - name: Upload JUnit report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
           path: report.xml
-
       - name: Publish test results
         if: always()
         uses: mikepenz/action-junit-report@v5
         with:
           report_paths: report.xml
+
+  calculate-coverage:
+    runs-on: ubuntu-latest
+    container: python:3.12-slim
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests with coverage
+        run: pytest -v --cov=. --cov-report term --cov-report xml:coverage.xml --cov-report html
+      - name: Show coverage in the run summary
+        if: always()
+        run: |
+          echo "## Code coverage" >> "$GITHUB_STEP_SUMMARY"
+          coverage report --format=markdown >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.xml
+            htmlcov/
