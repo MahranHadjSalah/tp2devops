@@ -57,7 +57,7 @@ pytest -v --cov=. --cov-report term --cov-report xml:coverage.xml --cov-report h
 ### CI pipeline
 
 The pipeline is defined in `.github/workflows/ci.yml` (GitHub Actions). The same pipeline for
-GitLab is in `.gitlab-ci.yml`.
+GitLab is in `.github/workflows/ci.yml`.
 
 | Stage | Job | What it does |
 |---|---|---|
@@ -162,3 +162,9 @@ git push
 - Leader: _your name_
 - Dev1: _name_
 - Dev2: _name_
+
+## TP3: Continuous Integration
+
+- New endpoint: `GET /soustraction?a=5&b=3` returns a - b.
+- Unit test: `test_main.py`, run with `pytest -v`.
+- Pipeline: `.github/workflows/ci.yml` runs the test on each push and saves a JUnit report.
