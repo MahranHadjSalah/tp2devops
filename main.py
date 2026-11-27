@@ -1,8 +1,8 @@
+"""Task Management API - FastAPI application for the DevOps TP (TP2/TP3)."""
 import socket
-
 from typing import Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -20,15 +20,16 @@ app.add_middleware(
 )
 
 
-# ---------------------------------------------------------------------------
-# Models
-# ---------------------------------------------------------------------------
-
 class Operands(BaseModel):
+    """Two numbers used by the multiply and divide endpoints."""
+
     a: float
     b: float
 
+
 class Item(BaseModel):
+    """An item stored in memory."""
+
     name: str
     description: Optional[str] = None
 
@@ -39,19 +40,23 @@ items: Dict[int, Item] = {
     3: Item(name="item3", description="third item"),
 }
 
-# ---------------------------------------------------------------------------
-# Routes
-# ---------------------------------------------------------------------------
-
 
 @app.get("/")
 def root() -> dict:
+    """Health check: confirm the API is running."""
     return {"message": "it works !"}
 
 
 @app.get("/addition")
 def addition(a: int, b: int) -> dict:
+    """Return a + b."""
     return {"result a+b=": a + b, "developer": "Dev1"}
+
+
+@app.get("/soustraction")
+def soustraction(a: int, b: int) -> dict:
+    """Return a - b."""
+    return {"result a-b=": a - b, "developer": "Dev1"}
 
 
 def current_ip() -> str:
@@ -68,6 +73,7 @@ def current_ip() -> str:
 
 @app.get("/greeting")
 def greeting(name: str) -> dict:
+    """Greet a user and show the host name and IP of the server."""
     return {
         "message": f"Hello, {name}",
         "developer": "Dev2",
@@ -78,22 +84,27 @@ def greeting(name: str) -> dict:
 
 @app.post("/multiply")
 def multiply(op: Operands) -> dict:
+    """Return a * b."""
     return {"result a*b=": op.a * op.b, "developer": "Dev1"}
 
 
 @app.post("/divide")
 def divide(op: Operands) -> dict:
+    """Return a / b, or HTTP 400 when b is 0."""
     if op.b == 0:
         raise HTTPException(status_code=400, detail="Division by zero")
     return {"result a/b=": op.a / op.b, "developer": "Dev2"}
 
+
 @app.get("/items")
 def list_items() -> List[dict]:
+    """List all items."""
     return [{"id": k, **v.model_dump()} for k, v in items.items()]
 
 
 @app.delete("/remove/{item_id}")
 def remove(item_id: int) -> dict:
+    """Delete an item by id, or HTTP 404 when it does not exist."""
     if item_id not in items:
         raise HTTPException(status_code=404, detail="Item not found")
     del items[item_id]
