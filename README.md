@@ -23,6 +23,52 @@ A minimal **FastAPI** application built as part of the *Plateforme collaborative
 {"result a+b=": 3, "developer": "Dev1"}
 ```
 
+- `GET /soustraction?a=5&b=3` returns `a - b` *(added in TP3)*:
+
+```json
+{"result a-b=": 2, "developer": "Dev1"}
+```
+
+- `POST /multiply` and `POST /divide` with body `{"a": 4, "b": 2}` (dividing by 0 returns HTTP 400).
+- `GET /items` lists the items, and `DELETE /remove/{id}` deletes one (unknown id returns HTTP 404).
+
+## TP3 – Continuous Integration
+
+### What was done
+
+1. New feature on the branch `feature/soustraction-with-unit-tests`: the `/soustraction` endpoint.
+2. Unit tests in `test_main.py` (FastAPI `TestClient`). There are 13 tests covering every endpoint
+   and every error case.
+3. Code coverage: **100 %** (it started at 67 % with a single test).
+4. Code quality: **pylint 10.00/10** (it started at 6.80/10). The fixes were docstrings, an
+   unused import and a missing final newline.
+5. Everything is automated in a CI pipeline that runs on every push and pull request.
+
+### Run the checks locally
+
+```bash
+pip install -r requirements.txt
+pylint main.py test_main.py                                   # code quality (target 10/10)
+pytest -v --junitxml=report.xml                               # unit tests + JUnit report
+pytest -v --cov=. --cov-report term --cov-report xml:coverage.xml --cov-report html
+# then open htmlcov/index.html to see the uncovered lines
+```
+
+### CI pipeline
+
+The pipeline is defined in `.github/workflows/ci.yml` (GitHub Actions). The same pipeline for
+GitLab is in `.gitlab-ci.yml`.
+
+| Stage | Job | What it does |
+|---|---|---|
+| `code_quality` | `pylint` | Runs `pylint --fail-under=10 *.py` and fails if the score is below 10/10 |
+| `test` | `run-test` | Runs pytest, publishes the JUnit XML report and saves `report.xml` as an artifact |
+| `test` | `calculate-coverage` | Measures coverage, shows it in the run summary and saves `coverage.xml` + `htmlcov/` as artifacts |
+
+The `test` jobs only start after `pylint` succeeds. A branch is merged into `main` through a
+pull request only when the pipeline is green. That is continuous integration: the whole
+application is checked automatically before every merge.
+
 ## Prerequisites
 
 - Python 3.10+
@@ -55,7 +101,7 @@ source venv/bin/activate
 ### 3. Install dependencies
 
 ```bash
-pip install fastapi "uvicorn[standard]"
+pip install -r requirements.txt
 ```
 
 ## Run the Application
