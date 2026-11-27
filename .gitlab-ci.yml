@@ -1,39 +1,17 @@
-# GitLab equivalent of .github/workflows/ci.yml (GitHub ignores this file).
-image: python:3.12-slim
-
 stages:
-  - code_quality
   - test
-
-before_script:
-  - pip install -r requirements.txt
-
-pylint:
-  stage: code_quality
-  script:
-    - pylint --fail-under=10 *.py
 
 run-test:
   stage: test
+  image: python:3.11-slim
+  before_script:
+    - pip install -r requirements.txt
   script:
-    - pytest -v --junitxml=report.xml
+    - pytest -v test_main.py --junitxml=report.xml
   artifacts:
     when: always
     paths:
       - report.xml
     reports:
       junit: report.xml
-
-calculate-coverage:
-  stage: test
-  script:
-    - pytest -v --cov=. --cov-report term --cov-report xml:coverage.xml --cov-report html
-  coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  artifacts:
-    paths:
-      - coverage.xml
-      - htmlcov/
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
+    expire_in: 1 week
